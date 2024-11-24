@@ -1,107 +1,77 @@
-import pynput
-import pyautogui
-pyautogui.useImageNotFoundException(False)
 import threading
-from life_mana import usar_suplies
+import pyautogui
+from pynput import keyboard
+from life_mana import usar_supplies
 
-LIST_HOTKEY_ATK = [{"hotkey": "F5", "delay": 1.5}, {"hotkey": "F6", "delay": 1.5}, {"hotkey": "F7", "delay": 1.5}, {"hotkey": "F8", "delay": 1.5}]
-BATTLE = (3091, 347, 166, 54)
+# Constantes
+LIST_HOTKEY_ATK = [
+    {"hotkey": "F5", "delay": 2},
+    {"hotkey": "F6", "delay": 2},
+    {"hotkey": "F7", "delay": 2},
+    {"hotkey": "F8", "delay": 2}
+]
 
-def rotacao():
-    global event_rotacao
-    while not event_rotacao.is_set():
-        for hotkey in LIST_HOTKEY_ATK:
-            if event_rotacao.is_set():
-                return
-            else:
-                execute_hotkey(hotkey["hotkey"])
-                pyautogui.sleep(hotkey["delay"])
+# Variáveis globais
+rotacao_ativa = False
+supplies_ativo = False
+event_rotacao = threading.Event()
+event_supplies = threading.Event()
+th_rotacao = None
+th_supplies = None
 
 
 def execute_hotkey(hotkey):
     pyautogui.press(hotkey)
 
+def rotacao():
+    while not event_rotacao.is_set():
+        for hotkey in LIST_HOTKEY_ATK:
+            if event_rotacao.is_set():
+                break
+            execute_hotkey(hotkey["hotkey"])
+            pyautogui.sleep(hotkey["delay"])
 
-run_bot = False
-def create_listener():
-    def key_press(key):
-        global run_bot
-        if key == pynput.keyboard.Key.delete:
-            print("Kill bot") 
-            listener.stop()
+def on_press(key):
+    global rotacao_ativa, supplies_ativo, th_rotacao, th_supplies, event_rotacao, event_supplies
 
-    listener = pynput.keyboard.Listener(on_press=key_press)
-    listener.start()
-
-create_listener()
-    
-#ROTACOES
-event_rotacao = threading.Event()
-th_rotacao = None
-def key_press(key):
-    global run_bot, event_rotacao, th_rotacao
-    if hasattr(key, 'char') and key.char == 'c':
-        if run_bot == False:
-            run_bot = True
-            th_rotacao = threading.Thread(target=rotacao)
-            th_rotacao.start()
-            print("Start Rotacao")
-        else:
-            run_bot = False
+    if key == keyboard.Key.delete:
+        if rotacao_ativa:
             event_rotacao.set()
-            if th_rotacao is not None:
-                th_rotacao.join()
-            print("Stop Rotacao")
-    
-    if hasattr(key, 'char') and key.char == 'x':
-        if run_bot == False:
-            run_bot = True
-            global th_suplies, event_supplies
-            event_supplies = threading.Event()
-            th_suplies = threading.Thread(target=usar_suplies, args=(event_supplies,))
-            th_suplies.start()
-            print("Start Supplies")
-        else:
-            run_bot = False
+        if supplies_ativo:
             event_supplies.set()
-            th_suplies.join()
-            print("Stop Supplies")
-
-#--------------------------------------MODELOS ANTIGOS--------------------------------------
-"""def rotacao():
-        while not event_rotacao.is_set():
-            for attack in LIST_HOTKEY_ATK:
-                if event_rotacao.is_set():
-                    return
-                if pyautogui.locateOnScreen('battle.png', confidence=0.9, region=BATTLE):
-                    continue
-                pyautogui.press(attack["hotkey"]) x
-                pyautogui.sleep(attack["delay"])"""
-
-"""    if hasattr(key, 'char') and key.char == 'x':
-        if run_bot == False:
-            run_bot = True
-            global th_rotacao, th_suplies, event_rotacao, event_suplies
-            event_suplies = threading.Event()
-            th_suplies = threading.Thread(target=usar_suplies, args=(event_suplies,))
-            th_rotacao = threading.Thread(target=rotacao)
-            event_rotacao = threading.Event()
-            print("Start Rotacao")
-            for hotkey in LIST_HOTKEY_ATK:
-                execute_hotkey(hotkey)
-            th_rotacao.start()
-            th_suplies.start()
-        else:
-            run_bot = False
-            event_rotacao.set()
-            event_suplies.set()
-            th_suplies.join()  
-            th_rotacao.join()
-            print("Stop Rotacao")
+        return False
     
-    if hasattr(key, 'char') and key.char == 'r':
-        print('Looting') 
-        get_loot()"""
+    try:
+        if key.char == 'f':
+            if not rotacao_ativa:
+                event_rotacao.clear()
+                th_rotacao = threading.Thread(target=rotacao)
+                th_rotacao.start()
+                rotacao_ativa = True
+                print("Rotação iniciada")
+            else:
+                event_rotacao.set()
+                rotacao_ativa = False
+                print("Rotação parada")
 
-with pynput.keyboard.Listener(on_press=key_press) as listener:
-    listener.join()
+        elif key.char == 'x':
+            if not supplies_ativo:
+                event_supplies.clear()
+                th_supplies = threading.Thread(target=usar_supplies, args=(event_supplies,))
+                th_supplies.start()
+                supplies_ativo = True
+                print("Supplies iniciado")
+            else:
+                event_supplies.set()
+                supplies_ativo = False
+                print("Supplies parado")
+
+    except AttributeError:
+        pass
+
+# Iniciar o listener
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
+
+# Manter o programa rodando
+listener.join()
