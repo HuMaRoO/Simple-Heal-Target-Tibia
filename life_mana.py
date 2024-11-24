@@ -25,8 +25,8 @@ def usar_suplies(event):
             return
         else:
             if not color_check(LIFE_REGION, 80, COR_LIFE):
-                pyautogui.press('F3')
-            if not color_check(MANA_REGION, 65, COR_MANA):
+                pyautogui.press('2')
+            if not color_check(MANA_REGION, 35, COR_MANA):
                 pyautogui.press('Space')
             if event.is_set():
                 return

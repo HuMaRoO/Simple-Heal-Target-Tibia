@@ -1,9 +1,8 @@
 from tkinter import *
-from tkinter.ttk import Label
+from tkinter.ttk import Label, Combobox, Checkbutton
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-import keyboard
 import pyautogui
 from window import hidden_client
 import subprocess
@@ -42,6 +41,15 @@ def opacity():
 btn_opacity = ttk.Button(aba1, text="Aplicar Opacity", command=opacity)
 btn_opacity.pack(pady=5)
 
+"""lbl_life = ttk.Label(aba2, text="Life %")
+lbl_life.grid(row=0, column=1)
+lbl_mana = ttk.Label(aba2, text="Mana %")
+lbl_mana.grid(row=1, column=1)
+cmb_life = ttk.Combobox(aba2, width=3, values=["10", "20", "30", "40", "50", "60", "70", "80", "90", "100"])
+cmb_life.grid(row=0, column=2)
+cmb_mana = ttk.Combobox(aba2, width=3, values=["10", "20", "30", "40", "50", "60", "70", "80", "90", "100"])
+cmb_mana.grid(row=1, column=2)"""
+
 process = None
 
 def start():
@@ -57,21 +65,6 @@ def stop():
     pyautogui.press('delete')
     btn_start_stop.config(text="Start", command=start)
 
-label_rotacao = tk.Label(button_frame, text="Rotação: OFF", font=("Arial", 12))
-label_rotacao.grid(row=2, column=3, sticky="E")
-
-rotacao_on = False
-
-def rotacao():
-    global rotacao_on
-    if rotacao_on:
-        rotacao_on = False
-        label_rotacao.config(text="Rotação: OFF")
-    else:
-        rotacao_on = True
-        label_rotacao.config(text="Rotação: ON")
-
-root.bind("x", lambda event: rotacao())
 
 btn_start_stop.config(command=start)
 
