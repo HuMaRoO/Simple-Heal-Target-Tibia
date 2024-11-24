@@ -17,14 +17,12 @@ def color_check(region, percent, color):
     y = region[1] + region[3]
     return pyautogui.pixelMatchesColor(int(x), int(y), color, 10)
 
-
-#ALTERAR PARA MODIFICAR AS OPÇÕES
-def usar_suplies(event):
+def usar_supplies(event):
     while not event.is_set():
         if not color_check(LIFE_REGION, 40, COR_LIFE):
             pyautogui.press('F1')
-        if event.is_set():
-            return
+            if event.is_set():
+                return
         else:
             if not color_check(LIFE_REGION, 80, COR_LIFE):
                 pyautogui.press('2')
@@ -32,3 +30,4 @@ def usar_suplies(event):
                 pyautogui.press('Space')
             if event.is_set():
                 return
+        pyautogui.sleep(0.1)
