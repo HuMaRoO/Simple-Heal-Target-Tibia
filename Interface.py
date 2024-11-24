@@ -7,7 +7,7 @@ import pyautogui
 from window import hidden_client
 import subprocess
 
-# Window Inicial
+# Window Inicial #
 root = tk.Tk()
 root.title("Interface")
 root.geometry("250x80")
