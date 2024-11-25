@@ -1,4 +1,4 @@
-Rotação de Healing/Skill com interface para o Tibia
+Rotação de Healing/Skill com interface para o Tibia (Utilizando OBS)
 
 
 Utilizar o pyinstaller para gerar o executavel
