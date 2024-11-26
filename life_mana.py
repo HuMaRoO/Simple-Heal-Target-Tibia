@@ -1,5 +1,6 @@
 import pyautogui
 import keyboard
+import time
 #Left: 3286, Top: 305, Width: 92, Height: 7
 
 LIFE_REGION = (3288, 304, 92, 4)
@@ -21,13 +22,19 @@ def usar_supplies(event):
     while not event.is_set():
         if not color_check(LIFE_REGION, 40, COR_LIFE):
             pyautogui.press('F1')
+            time.sleep(1)
             if event.is_set():
                 return
         else:
             if not color_check(LIFE_REGION, 80, COR_LIFE):
                 pyautogui.press('2')
-            if not color_check(MANA_REGION, 35, COR_MANA):
+                time.sleep(1)
+            elif not color_check(LIFE_REGION, 65, COR_LIFE):
+                pyautogui.press('1')
+                time.sleep(1)
+            if not color_check(MANA_REGION, 55, COR_MANA):
                 pyautogui.press('Space')
+                time.sleep(1)
             if event.is_set():
                 return
         pyautogui.sleep(0.1)
