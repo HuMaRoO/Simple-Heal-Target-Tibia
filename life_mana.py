@@ -1,7 +1,7 @@
 import pyautogui
 import keyboard
 import time
-#Left: 3286, Top: 305, Width: 92, Height: 7
+##Left: 3286, Top: 305, Width: 92, Height: 7
 
 LIFE_REGION = (3288, 304, 92, 4)
 MANA_REGION = (3288, 315, 92, 4)
