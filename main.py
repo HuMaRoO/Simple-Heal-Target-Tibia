@@ -42,7 +42,7 @@ def on_press(key):
         return False
     
     try:
-        if key.char == 'f':
+        if key.char == '0':
             if not rotacao_ativa:
                 event_rotacao.clear()
                 th_rotacao = threading.Thread(target=rotacao)
@@ -54,7 +54,7 @@ def on_press(key):
                 rotacao_ativa = False
                 print("Rotação parada")
 
-        elif key.char == 'x':
+        elif key.char == '-':
             if not supplies_ativo:
                 event_supplies.clear()
                 th_supplies = threading.Thread(target=usar_supplies, args=(event_supplies,))

@@ -42,7 +42,7 @@ def finalizar_programa():
     height = y2 - y1
     print(f'Left: {x1}, Top: {y1}, Width: {width}, Height: {height}')
 
-    # Esconde a janela temporariamente durante a captura
+    #Esconde a janela temporariamente durante a captura
     root.withdraw()
     img = pyautogui.screenshot(region=(x1, y1, width, height))
     img.save('chama.png')
